@@ -16,6 +16,7 @@
     "@tanstack/react-query": "^5.104.1",
     "lucide-react": "^1.53.0",
     "motion": "^14.0.0",
+    "pg": "^8.23.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.89.0",
@@ -39,5 +40,19 @@
     "typescript": "^5.7.0",
     "vite": "^8.0.5",
     "vitest": "^5.0.3"
-  }
+  },
+  "description": "EduNest is a multi-school operating system for Kenyan schools. This repository contains a React/Vite PWA, a tenant-aware Flask API, a Celery worker, and local MongoDB/Redis infrastructure.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oscar-star254/SCHOOL-MANAGEMENT-SYS.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Oscar-star254/SCHOOL-MANAGEMENT-SYS/issues"
+  },
+  "homepage": "https://github.com/Oscar-star254/SCHOOL-MANAGEMENT-SYS#readme"
 }
