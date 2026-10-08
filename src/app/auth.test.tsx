@@ -1,0 +1,2 @@
+import '@testing-library/jest-dom/vitest';import {render,screen} from '@testing-library/react';import {describe,it,expect} from 'vitest';import {AuthProvider,Can} from './auth';
+describe('Can',()=>{it('enforces granular permissions',()=>{render(<AuthProvider user={{id:'1',name:'Teacher',role:'Teacher',schoolId:'a',permissions:['marks.create']}}><Can permission="marks.create">Marks</Can><Can permission="fees.read">Fees</Can></AuthProvider>);expect(screen.getByText('Marks')).toBeVisible();expect(screen.queryByText('Fees')).toBeNull()})});

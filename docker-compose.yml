@@ -1,0 +1,44 @@
+services:
+  frontend:
+    build: .
+    ports: ["${APP_PORT:-8080}:80"]
+    depends_on: [backend]
+    restart: unless-stopped
+  backend:
+    build: ./backend
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-local-secret-change-in-production}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-local-jwt-change-in-production}
+      MONGO_URI: mongodb://mongo:27017/edunest
+      REDIS_URL: redis://redis:6379/0
+      USE_MEMORY_STORE: "true"
+      CORS_ORIGINS: http://localhost:${APP_PORT:-8080}
+    depends_on:
+      mongo: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    restart: unless-stopped
+  worker:
+    build: ./backend
+    command: celery -A celery_worker.celery worker --loglevel=INFO
+    environment: {REDIS_URL: redis://redis:6379/0}
+    depends_on:
+      redis: {condition: service_healthy}
+    restart: unless-stopped
+  seed:
+    build: ./backend
+    command: python scripts/seed.py
+    environment: {USE_MEMORY_STORE: "true"}
+    depends_on: [backend]
+    restart: "no"
+  mongo:
+    image: mongo:8
+    volumes: [mongo_data:/data/db]
+    healthcheck: {test: ["CMD","mongosh","--quiet","--eval","db.runCommand('ping').ok"], interval: 10s, timeout: 5s, retries: 10}
+    restart: unless-stopped
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes: [redis_data:/data]
+    healthcheck: {test: ["CMD","redis-cli","ping"], interval: 5s, timeout: 3s, retries: 10}
+    restart: unless-stopped
+volumes: {mongo_data: {}, redis_data: {}}

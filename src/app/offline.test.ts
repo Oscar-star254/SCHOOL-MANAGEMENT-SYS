@@ -1,0 +1,2 @@
+import {beforeEach,describe,expect,it,vi} from 'vitest';import {enqueue,flushQueue,pendingActions} from './offline';
+beforeEach(()=>localStorage.clear());describe('offline queue',()=>{it('persists and flushes school actions',async()=>{enqueue('attendance',{student:'1',status:'present'});expect(pendingActions()).toHaveLength(1);const send=vi.fn().mockResolvedValue(undefined);expect(await flushQueue(send)).toEqual({sent:1,failed:0});expect(pendingActions()).toHaveLength(0)})});
